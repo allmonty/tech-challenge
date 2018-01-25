@@ -7,7 +7,8 @@ defmodule MoneyTest do
   setup do
     {:ok,
      recipient: %{
-       code: "ABC",
+       alph_code: "ABC",
+       num_code: 986,
        decimal_points: 3,
        int_part: 42,
        dec_part: 72,
@@ -15,150 +16,205 @@ defmodule MoneyTest do
      }}
   end
 
-  #======Testing about the received amount=====#
+  # ======Testing the received amount=====#
 
   test "#new receiving a float should split it", state do
-    %{code: code, decimal_points: dec_points} = state.recipient
+    %{alph_code: alph_code, num_code: num_code, decimal_points: dec_points} = state.recipient
 
     amount = 42.5
 
-    {:ok, %Money{int_part: int_part, dec_part: dec_part}} = Money.new(amount, code, dec_points)
+    {:ok, %Money{int_part: int_part, dec_part: dec_part}} =
+      Money.new(amount, alph_code, num_code, dec_points)
 
     assert int_part == 42
     assert dec_part == 5
   end
 
   test "#new receiving an int should split it with dec_part 0", state do
-    %{code: code, decimal_points: dec_points} = state.recipient
+    %{alph_code: alph_code, num_code: num_code, decimal_points: dec_points} = state.recipient
 
     amount = 42
 
-    {:ok, %Money{int_part: int_part, dec_part: dec_part}} = Money.new(amount, code, dec_points)
+    {:ok, %Money{int_part: int_part, dec_part: dec_part}} =
+      Money.new(amount, alph_code, num_code, dec_points)
 
     assert int_part == 42
     assert dec_part == 0
   end
 
   test "#new receiving a negative float should return error", state do
-    %{code: code, decimal_points: dec_points} = state.recipient
+    %{alph_code: alph_code, num_code: num_code, decimal_points: dec_points} = state.recipient
 
     amount = -42.5
 
-    {resp, _response} = Money.new(amount, code, dec_points)
+    {resp, _response} = Money.new(amount, alph_code, num_code, dec_points)
 
     assert resp == :error
   end
 
   test "#new receiving a negative int should return error", state do
-    %{code: code, decimal_points: dec_points} = state.recipient
+    %{alph_code: alph_code, num_code: num_code, decimal_points: dec_points} = state.recipient
 
     amount = -42
 
-    {resp, _response} = Money.new(amount, code, dec_points)
+    {resp, _response} = Money.new(amount, alph_code, num_code, dec_points)
 
     assert resp == :error
   end
 
   test "#new receiving a string in amount should return error", state do
-    %{code: code, decimal_points: dec_points} = state.recipient
+    %{alph_code: alph_code, num_code: num_code, decimal_points: dec_points} = state.recipient
 
     amount = "teste"
 
-    {resp, _response} = Money.new(amount, code, dec_points)
+    {resp, _response} = Money.new(amount, alph_code, num_code, dec_points)
 
     assert resp == :error
   end
 
   test "#new receiving nil in amount should return error", state do
-    %{code: code, decimal_points: dec_points} = state.recipient
+    %{alph_code: alph_code, num_code: num_code, decimal_points: dec_points} = state.recipient
 
     amount = "teste"
 
-    {resp, _response} = Money.new(amount, code, dec_points)
+    {resp, _response} = Money.new(amount, alph_code, num_code, dec_points)
 
     assert resp == :error
   end
 
-  #======Testing about the received code=====#
+  # ======Testing the received alph_code=====#
 
-  test "#new receiving valid code should return ok", state do
-    %{value: amount, decimal_points: dec_points} = state.recipient
+  test "#new receiving valid alph_code should return ok", state do
+    %{value: amount, num_code: num_code, decimal_points: dec_points} = state.recipient
 
-    code = "BRL"
+    alph_code = "BRL"
 
-    {:ok, %Money{code: resp_code}} = Money.new(amount, code, dec_points)
+    {:ok, %Money{alph_code: resp_alph_code}} = Money.new(amount, alph_code, num_code, dec_points)
 
-    assert resp_code == code
+    assert resp_alph_code == alph_code
   end
 
-  test "#new receiving 4 digits code should return error", state do
-    %{value: amount, decimal_points: dec_points} = state.recipient
+  test "#new receiving 4 digits alph_code should return error", state do
+    %{value: amount, num_code: num_code, decimal_points: dec_points} = state.recipient
 
-    code = "BRLA"
+    alph_code = "BRLA"
 
-    {resp, _response} = Money.new(amount, code, dec_points)
+    {resp, _response} = Money.new(amount, alph_code, num_code, dec_points)
 
     assert resp == :error
   end
 
-  test "#new receiving 2 digits code should return error", state do
-    %{value: amount, decimal_points: dec_points} = state.recipient
+  test "#new receiving 2 digits alph_code should return error", state do
+    %{value: amount, num_code: num_code, decimal_points: dec_points} = state.recipient
 
-    code = "BR"
+    alph_code = "BR"
 
-    {resp, _response} = Money.new(amount, code, dec_points)
-
-    assert resp == :error
-  end
-
-  test "#new receiving empty string code should return error", state do
-    %{value: amount, decimal_points: dec_points} = state.recipient
-
-    code = ""
-
-    {resp, _response} = Money.new(amount, code, dec_points)
+    {resp, _response} = Money.new(amount, alph_code, num_code, dec_points)
 
     assert resp == :error
   end
 
-  #======Testing about the received decimal_points=====#
+  test "#new receiving empty string alph_code should return error", state do
+    %{value: amount, num_code: num_code, decimal_points: dec_points} = state.recipient
+
+    alph_code = ""
+
+    {resp, _response} = Money.new(amount, alph_code, num_code, dec_points)
+
+    assert resp == :error
+  end
+
+  # ======Testing the received num_code=====#
+
+  test "#new receiving valid num_code should return ok", state do
+    %{value: amount, alph_code: alph_code, decimal_points: dec_points} = state.recipient
+
+    num_code = 986
+
+    {:ok, %Money{num_code: resp_num_code}} = Money.new(amount, alph_code, num_code, dec_points)
+
+    assert resp_num_code == num_code
+  end
+
+  test "#new receiving negative num_code should return ok", state do
+    %{value: amount, alph_code: alph_code, decimal_points: dec_points} = state.recipient
+
+    num_code = -986
+
+    {resp, _response} = Money.new(amount, alph_code, num_code, dec_points)
+
+    assert resp == :error
+  end
+
+  test "#new receiving 4 digits num_code should return ok", state do
+    %{value: amount, alph_code: alph_code, decimal_points: dec_points} = state.recipient
+
+    num_code = 9864
+
+    {resp, _response} = Money.new(amount, alph_code, num_code, dec_points)
+
+    assert resp == :error
+  end
+
+  test "#new receiving binary num_code should return ok", state do
+    %{value: amount, alph_code: alph_code, decimal_points: dec_points} = state.recipient
+
+    num_code = "9864"
+
+    {resp, _response} = Money.new(amount, alph_code, num_code, dec_points)
+
+    assert resp == :error
+  end
+
+  test "#new receiving float num_code should return ok", state do
+    %{value: amount, alph_code: alph_code, decimal_points: dec_points} = state.recipient
+
+    num_code = 42.5
+
+    {resp, _response} = Money.new(amount, alph_code, num_code, dec_points)
+
+    assert resp == :error
+  end
+
+  # ======Testing the received decimal_points=====#
 
   test "#new receiving float should return error", state do
-    %{value: amount, code: code} = state.recipient
+    %{value: amount, num_code: num_code, alph_code: alph_code} = state.recipient
 
     dec_points = 2.5
 
-    {resp, _response} = Money.new(amount, code, dec_points)
+    {resp, _response} = Money.new(amount, alph_code, num_code, dec_points)
 
     assert resp == :error
   end
 
   test "#new receiving string should return error", state do
-    %{value: amount, code: code} = state.recipient
+    %{value: amount, num_code: num_code, alph_code: alph_code} = state.recipient
 
     dec_points = "2.5"
 
-    {resp, _response} = Money.new(amount, code, dec_points)
+    {resp, _response} = Money.new(amount, alph_code, num_code, dec_points)
 
     assert resp == :error
   end
 
   test "#new receiving negative integer should return error", state do
-    %{value: amount, code: code} = state.recipient
+    %{value: amount, num_code: num_code, alph_code: alph_code} = state.recipient
 
     dec_points = -2
 
-    {resp, _response} = Money.new(amount, code, dec_points)
+    {resp, _response} = Money.new(amount, alph_code, num_code, dec_points)
 
     assert resp == :error
   end
 
   test "#new receiving positive integer should return ok", state do
-    %{value: amount, code: code} = state.recipient
+    %{value: amount, num_code: num_code, alph_code: alph_code} = state.recipient
 
     dec_points = 2
 
-    {:ok, %Money{decimal_points: resp_points}} = Money.new(amount, code, dec_points)
+    {:ok, %Money{decimal_points: resp_points}} =
+      Money.new(amount, alph_code, num_code, dec_points)
 
     assert resp_points == 2
   end
