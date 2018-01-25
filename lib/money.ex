@@ -1,6 +1,14 @@
 defmodule FinancialSystem.Money do
   defstruct currency: nil, int_part: nil, dec_part: nil
 
+  def new(amount, %FinancialSystem.Currency{
+        alph_code: alph_code,
+        num_code: num_code,
+        decimal_points: decimal_points
+      }) do
+    new(amount, alph_code, num_code, decimal_points)
+  end
+
   def new(amount, alph_code, num_code, decimal_points) do
     with {:ok, alph_code} <- is_valid_alph_code(alph_code),
          {:ok, num_code} <- is_valid_num_code(num_code),
