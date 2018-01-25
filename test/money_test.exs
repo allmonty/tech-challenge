@@ -3,6 +3,7 @@ defmodule MoneyTest do
   doctest FinancialSystem.Money
 
   alias FinancialSystem.Money
+  alias FinancialSystem.Currency
 
   setup do
     {:ok,
@@ -89,7 +90,7 @@ defmodule MoneyTest do
 
     alph_code = "BRL"
 
-    {:ok, %Money{alph_code: resp_alph_code}} = Money.new(amount, alph_code, num_code, dec_points)
+    {:ok, %Money{currency: %Currency{alph_code: resp_alph_code}}} = Money.new(amount, alph_code, num_code, dec_points)
 
     assert resp_alph_code == alph_code
   end
@@ -131,7 +132,7 @@ defmodule MoneyTest do
 
     num_code = 986
 
-    {:ok, %Money{num_code: resp_num_code}} = Money.new(amount, alph_code, num_code, dec_points)
+    {:ok, %Money{currency: %FinancialSystem.Currency{num_code: resp_num_code}}} = Money.new(amount, alph_code, num_code, dec_points)
 
     assert resp_num_code == num_code
   end
@@ -213,7 +214,7 @@ defmodule MoneyTest do
 
     dec_points = 2
 
-    {:ok, %Money{decimal_points: resp_points}} =
+    {:ok, %Money{currency: %FinancialSystem.Currency{decimal_points: resp_points}}} =
       Money.new(amount, alph_code, num_code, dec_points)
 
     assert resp_points == 2

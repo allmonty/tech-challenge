@@ -1,5 +1,5 @@
 defmodule FinancialSystem.Money do
-  defstruct alph_code: nil, num_code: nil, decimal_points: nil, int_part: nil, dec_part: nil
+  defstruct currency: nil, int_part: nil, dec_part: nil
 
   def new(amount, alph_code, num_code, decimal_points) do
     with {:ok, alph_code} <- is_valid_alph_code(alph_code),
@@ -11,11 +11,13 @@ defmodule FinancialSystem.Money do
          {:ok, {int_part, dec_part}} <- split_number_in_two_integers(amount) do
       {:ok,
        %FinancialSystem.Money{
-         alph_code: alph_code,
-         num_code: num_code,
-         int_part: int_part,
+         currency: %FinancialSystem.Currency{
+           alph_code: alph_code,
+           num_code: num_code,
+           decimal_points: decimal_points
+         },
          dec_part: dec_part,
-         decimal_points: decimal_points
+         int_part: int_part
        }}
     else
       {:error, reason} -> {:error, reason}
