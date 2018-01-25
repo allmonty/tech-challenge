@@ -17,7 +17,7 @@ defmodule MoneyTest do
      }}
   end
 
-  # ======Testing the received amount=====#
+  # ====== Testing the received amount ===== #
 
   test "#new receiving a float should split it", state do
     %{alph_code: alph_code, num_code: num_code, decimal_points: dec_points} = state.recipient
@@ -83,7 +83,7 @@ defmodule MoneyTest do
     assert resp == :error
   end
 
-  # ======Testing the received alph_code=====#
+  # ====== Testing the received alph_code ===== #
 
   test "#new receiving valid alph_code should return ok", state do
     %{value: amount, num_code: num_code, decimal_points: dec_points} = state.recipient
@@ -126,7 +126,7 @@ defmodule MoneyTest do
     assert resp == :error
   end
 
-  # ======Testing the received num_code=====#
+  # ====== Testing the received num_code ===== #
 
   test "#new receiving valid num_code should return ok", state do
     %{value: amount, alph_code: alph_code, decimal_points: dec_points} = state.recipient
@@ -179,7 +179,7 @@ defmodule MoneyTest do
     assert resp == :error
   end
 
-  # ======Testing the received decimal_points=====#
+  # ====== Testing the received decimal_points ===== #
 
   test "#new receiving float should return error", state do
     %{value: amount, num_code: num_code, alph_code: alph_code} = state.recipient
@@ -222,7 +222,7 @@ defmodule MoneyTest do
     assert resp_points == 2
   end
 
-  # ======Testing retrieving unsplitted amount=====#
+  # ====== Testing retrieving unsplitted amount ===== #
 
   test "#retrieve_unsplitted_amount receiving money with amount 42.123 and 2 dec_points should return 42.12",
        state do

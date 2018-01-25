@@ -18,6 +18,8 @@ defmodule CalculatorTest do
      }}
   end
 
+  # ====== Testing convert_currency ===== #
+
   test "#convert_currency should return money with the converted alph_code", state do
     %{money: money, currency_usd: currency} = state.recipient
 
@@ -79,5 +81,79 @@ defmodule CalculatorTest do
     converted_amount = Money.retrieve_unsplitted_amount(converted_money)
 
     assert converted_amount == 0
+  end
+
+  # ====== Testing sum ===== #
+
+  test "#sum should sum 0 reais to 10 reais returning 10", state do
+    %{money: money} = state.recipient
+
+    {:ok, added_money} = Calculator.sum(money, 0)
+    added_amount = Money.retrieve_unsplitted_amount(added_money)
+
+    assert added_amount == 10
+  end
+
+  test "#sum should sum 10 reais to 10 reais returning 20", state do
+    %{money: money} = state.recipient
+
+    {:ok, added_money} = Calculator.sum(money, 10)
+    added_amount = Money.retrieve_unsplitted_amount(added_money)
+
+    assert added_amount == 20
+  end
+
+  test "#sum should sum 10.57 reais to 10 reais returning 20.57", state do
+    %{money: money} = state.recipient
+
+    {:ok, added_money} = Calculator.sum(money, 10.57)
+    added_amount = Money.retrieve_unsplitted_amount(added_money)
+
+    assert added_amount == 20.57
+  end
+
+  test "#sum should sum -15.57 reais to 10 reais returning error", state do
+    %{money: money} = state.recipient
+
+    {resp, _response} = Calculator.sum(money, -15.57)
+
+    assert resp == :error
+  end
+
+  # ====== Testing subtract ===== #
+
+  test "#subtract 10 reais from 10 reais returning 0", state do
+    %{money: money} = state.recipient
+
+    {:ok, added_money} = Calculator.subtract(money, 10)
+    added_amount = Money.retrieve_unsplitted_amount(added_money)
+
+    assert added_amount == 0
+  end
+
+  test "#subtract 5.42 reais from 10 reais returning 4.58", state do
+    %{money: money} = state.recipient
+
+    {:ok, added_money} = Calculator.subtract(money, 5.42)
+    added_amount = Money.retrieve_unsplitted_amount(added_money)
+
+    assert added_amount == 4.58
+  end
+
+  test "#subtract 0 reais from 10 reais returning 10", state do
+    %{money: money} = state.recipient
+
+    {:ok, added_money} = Calculator.subtract(money, 0)
+    added_amount = Money.retrieve_unsplitted_amount(added_money)
+
+    assert added_amount == 10
+  end
+
+  test "#subtract -15.57 reais from 10 reais returning error", state do
+    %{money: money} = state.recipient
+
+    {resp, _response} = Calculator.subtract(money, -15.57)
+
+    assert resp == :error
   end
 end
