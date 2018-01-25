@@ -96,4 +96,38 @@ defmodule FinancialSystemTest do
 
     assert resp == :error
   end
+
+  test "#transfer_money_converting between different currency accounts" do
+    currency_brl = %FinancialSystem.Currency{alph_code: "BRL", num_code: 986, decimal_points: 2}
+    {:ok, money_brl1} = FinancialSystem.Money.new(20, currency_brl)
+    account1 = FinancialSystem.Account.new("Allan", money_brl1)
+
+    currency_usd = %FinancialSystem.Currency{alph_code: "USD", num_code: 840, decimal_points: 2}
+    {:ok, money_brl2} = FinancialSystem.Money.new(10, currency_usd)
+    account2 = FinancialSystem.Account.new("David", money_brl2)
+
+    {:ok, %{from: ac1, to: ac2}} =
+      FinancialSystem.transfer_money_converting(10, 0.31825, account1, account2)
+
+    amount1 = FinancialSystem.Money.retrieve_unsplitted_amount(ac1.funds)
+    amount2 = FinancialSystem.Money.retrieve_unsplitted_amount(ac2.funds)
+
+    assert amount1 == 10
+    assert amount2 == 13.18
+  end
+
+  test "transfer_money_converting cannot transfer if not enough money available on the account" do
+    currency_brl = %FinancialSystem.Currency{alph_code: "BRL", num_code: 986, decimal_points: 2}
+    {:ok, money_brl1} = FinancialSystem.Money.new(20, currency_brl)
+    account1 = FinancialSystem.Account.new("Allan", money_brl1)
+
+    currency_usd = %FinancialSystem.Currency{alph_code: "USD", num_code: 840, decimal_points: 2}
+    {:ok, money_brl2} = FinancialSystem.Money.new(10, currency_usd)
+    account2 = FinancialSystem.Account.new("David", money_brl2)
+
+    {resp, _response} =
+      FinancialSystem.transfer_money_converting(100, 0.31825, account1, account2)
+
+    assert resp == :error
+  end
 end
