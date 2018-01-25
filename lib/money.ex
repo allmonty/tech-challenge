@@ -24,6 +24,15 @@ defmodule FinancialSystem.Money do
     end
   end
 
+  def retrieve_unsplitted_amount(%FinancialSystem.Money{
+        int_part: int_part,
+        dec_part: dec_part,
+        currency: %FinancialSystem.Currency{decimal_points: dec_points}
+      }) do
+    {number, _rest} = Float.parse("#{int_part}.#{dec_part}")
+    Float.round(number, dec_points)
+  end
+
   defp is_valid_integer(number) do
     cond do
       is_integer(number) ->

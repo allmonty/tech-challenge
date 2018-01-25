@@ -90,7 +90,8 @@ defmodule MoneyTest do
 
     alph_code = "BRL"
 
-    {:ok, %Money{currency: %Currency{alph_code: resp_alph_code}}} = Money.new(amount, alph_code, num_code, dec_points)
+    {:ok, %Money{currency: %Currency{alph_code: resp_alph_code}}} =
+      Money.new(amount, alph_code, num_code, dec_points)
 
     assert resp_alph_code == alph_code
   end
@@ -132,7 +133,8 @@ defmodule MoneyTest do
 
     num_code = 986
 
-    {:ok, %Money{currency: %FinancialSystem.Currency{num_code: resp_num_code}}} = Money.new(amount, alph_code, num_code, dec_points)
+    {:ok, %Money{currency: %FinancialSystem.Currency{num_code: resp_num_code}}} =
+      Money.new(amount, alph_code, num_code, dec_points)
 
     assert resp_num_code == num_code
   end
@@ -218,5 +220,59 @@ defmodule MoneyTest do
       Money.new(amount, alph_code, num_code, dec_points)
 
     assert resp_points == 2
+  end
+
+  # ======Testing retrieving unsplitted amount=====#
+
+  test "#retrieve_unsplitted_amount receiving money with amount 42.123 and 2 dec_points should return 42.12",
+       state do
+    %{num_code: num_code, alph_code: alph_code} = state.recipient
+
+    amount = 42.123
+    dec_points = 2
+
+    {:ok, money} = Money.new(amount, alph_code, num_code, dec_points)
+    unsplitted = Money.retrieve_unsplitted_amount(money)
+
+    assert unsplitted == 42.12
+  end
+
+  test "#retrieve_unsplitted_amount receiving money with amount 42.123 and 1 dec_points should return 42.1",
+       state do
+    %{num_code: num_code, alph_code: alph_code} = state.recipient
+
+    amount = 42.123
+    dec_points = 1
+
+    {:ok, money} = Money.new(amount, alph_code, num_code, dec_points)
+    unsplitted = Money.retrieve_unsplitted_amount(money)
+
+    assert unsplitted == 42.1
+  end
+
+  test "#retrieve_unsplitted_amount receiving money with amount 42.156 and 1 dec_points should round to 42.2",
+       state do
+    %{num_code: num_code, alph_code: alph_code} = state.recipient
+
+    amount = 42.156
+    dec_points = 1
+
+    {:ok, money} = Money.new(amount, alph_code, num_code, dec_points)
+    unsplitted = Money.retrieve_unsplitted_amount(money)
+
+    assert unsplitted == 42.2
+  end
+
+  test "#retrieve_unsplitted_amount receiving money with amount 42.156 and 0 dec_points should round to 42",
+       state do
+    %{num_code: num_code, alph_code: alph_code} = state.recipient
+
+    amount = 42.156
+    dec_points = 0
+
+    {:ok, money} = Money.new(amount, alph_code, num_code, dec_points)
+    unsplitted = Money.retrieve_unsplitted_amount(money)
+
+    assert unsplitted == 42
   end
 end
