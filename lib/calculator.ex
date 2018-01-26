@@ -12,7 +12,12 @@ defmodule FinancialSystem.Calculator do
     Money.new(converted_amount, currency)
   end
 
-  def sum(money, amount) do
+  def sum(%Money{} = money, %Money{} = amount) do
+    retrieved_amount = Money.retrieve_unsplitted_amount(amount)
+    sum(money, retrieved_amount)
+  end
+
+  def sum(%Money{} = money, amount) do
     money_amount = Money.retrieve_unsplitted_amount(money)
     Money.new(money_amount + amount, money.currency)
   end
