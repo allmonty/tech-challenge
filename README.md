@@ -1,3 +1,10 @@
+# Minha resolução do Tech Challenge de Elixir da Stone
+- Branch Master: [![Build Status](https://travis-ci.org/allmonty/tech-challenge.svg?branch=master)](https://travis-ci.org/allmonty/tech-challenge)
+[![Coverage Status](https://coveralls.io/repos/github/allmonty/tech-challenge/badge.svg?branch=master)](https://coveralls.io/github/allmonty/tech-challenge?branch=master)
+- Branch Dev: [![Build Status](https://travis-ci.org/allmonty/tech-challenge.svg?branch=dev)](https://travis-ci.org/allmonty/tech-challenge)
+[![Coverage Status](https://coveralls.io/repos/github/allmonty/tech-challenge/badge.svg?branch=dev)](https://coveralls.io/github/allmonty/tech-challenge?branch=dev)
+- Todo o código do Master é formatado usando o Elixir formatter (Elixir >= 1.6)
+
 # Tech Challenge 
 
 Bem vindo(a)! Esse é o Tech Challenge Elixir!
