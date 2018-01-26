@@ -5,3 +5,4 @@ otp_release:
   - '20.2.2'
 after_success:
   - mix format mix.exs "lib/**/*.{ex,exs}" "test/**/*.{ex,exs}" "lib/*.{ex,exs}" "test/*.{ex,exs}"
+  - ./travis_merge_script.sh
