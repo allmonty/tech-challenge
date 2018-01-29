@@ -22,6 +22,11 @@ defmodule FinancialSystem.Calculator do
     Money.new(money_amount + amount, money.currency)
   end
 
+  def subtract(%Money{} = money, %Money{} = amount) do
+    retrieved_amount = Money.retrieve_unsplitted_amount(amount)
+    subtract(money, retrieved_amount)
+  end
+
   def subtract(money, amount) do
     cond do
       amount >= 0 ->

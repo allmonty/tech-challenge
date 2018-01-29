@@ -32,7 +32,7 @@ defmodule FinancialSystemTest do
     assert account_b == account_before_2
   end
 
-  test "A transfer can be splitted between 2 or more accounts" do
+  test "A payment can be splitted between 2 or more accounts" do
     currency_brl = %FinancialSystem.Currency{alph_code: "BRL", num_code: 986, decimal_points: 2}
 
     {:ok, payment} = FinancialSystem.Money.new(50, currency_brl)
@@ -46,7 +46,7 @@ defmodule FinancialSystemTest do
     {:ok, money_brl2} = FinancialSystem.Money.new(50, currency_brl)
     account_2 = FinancialSystem.Account.new("David", money_brl2)
 
-    {:ok, transition } =
+    {:ok, transition} =
       FinancialSystem.payment_splitting_money_in_parts(receiver, payment, [
         {2, account_1},
         {3, account_2}
@@ -55,6 +55,31 @@ defmodule FinancialSystemTest do
     assert Money.retrieve_unsplitted_amount(transition.receiver.funds) == 100
     assert Money.retrieve_unsplitted_amount(Enum.at(transition.payers, 0).funds) == 30
     assert Money.retrieve_unsplitted_amount(Enum.at(transition.payers, 1).funds) == 20
+  end
+
+  test "A transfer can be splitted between 2 or more accounts" do
+    currency_brl = %FinancialSystem.Currency{alph_code: "BRL", num_code: 986, decimal_points: 2}
+
+    {:ok, transference} = FinancialSystem.Money.new(50, currency_brl)
+
+    {:ok, money_brl1} = FinancialSystem.Money.new(50, currency_brl)
+    origin = FinancialSystem.Account.new("Allan", money_brl1)
+
+    {:ok, money_brl1} = FinancialSystem.Money.new(50, currency_brl)
+    account_1 = FinancialSystem.Account.new("Monteiro", money_brl1)
+
+    {:ok, money_brl2} = FinancialSystem.Money.new(50, currency_brl)
+    account_2 = FinancialSystem.Account.new("David", money_brl2)
+
+    {:ok, transition} =
+      FinancialSystem.transfer_splitting_money_in_parts(origin, transference, [
+        {2, account_1},
+        {3, account_2}
+      ])
+
+    assert Money.retrieve_unsplitted_amount(transition.origin.funds) == 0
+    assert Money.retrieve_unsplitted_amount(Enum.at(transition.payers, 0).funds) == 70
+    assert Money.retrieve_unsplitted_amount(Enum.at(transition.payers, 1).funds) == 80
   end
 
   test "User should be able to exchange money between different currencies" do
