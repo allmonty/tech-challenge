@@ -76,7 +76,7 @@ defmodule MoneyTest do
   test "#new receiving nil in amount should return error", state do
     %{alph_code: alph_code, num_code: num_code, decimal_points: dec_points} = state.recipient
 
-    amount = "teste"
+    amount = nil
 
     {resp, _response} = Money.new(amount, alph_code, num_code, dec_points)
 
