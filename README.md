@@ -5,6 +5,13 @@
 [![Coverage Status](https://coveralls.io/repos/github/allmonty/tech-challenge/badge.svg?branch=dev)](https://coveralls.io/github/allmonty/tech-challenge?branch=dev)
 - Todo o código do Master é formatado usando o Elixir formatter (Elixir >= 1.6)
 
+#### Configurando Integração contínua e Teste de Cobertura:
+- [Auto-Merging with Travis-CI and Configuring Coveralls to Elixir](https://medium.com/@allanbrados/automerge-with-travis-ci-and-coveralls-to-elixir-248d1c6d2531)
+
+
+-------
+
+
 # Tech Challenge 
 
 Bem vindo(a)! Esse é o Tech Challenge Elixir!
